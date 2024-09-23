@@ -123,14 +123,22 @@ class ConstWay:
 #         self.travel_time = 2
 #         self.accuracy   = 30
 
-def print_res(way, step, travel_time, points_cnt, accuracy):
-    print('step, m:', step)
+def print_res(way, travel_time, step, points_cnt, accuracy):
     print('travel_time, s:', travel_time)
-    print('points_cnt:', points_cnt)
+    print('step, m:', step)
     print('accuracy:', accuracy)
+    print('points_cnt:', points_cnt)
     print('result:')
     for point in way:
-        print(round(point[0], 6), ',', round(point[1], 6), sep='')
+        print(round(point[0], 6), round(point[1], 6))
+
+def save_res(way, travel_time, sep = ','):
+    res = []
+    for point in way:
+        res.append(f'{round(point[0], 5)}{sep}{round(point[1], 5)}\n')
+    fname_str = f'output/way_t{travel_time}.csv'.format()
+    with open(fname_str, mode='w') as file:
+        file.writelines(res,)
 
 def show_res(points, label):
     x = []
@@ -140,15 +148,19 @@ def show_res(points, label):
         y.append(point[1])
     import matplotlib.pyplot as plt
     plt.plot(x, y, label=label)
+    # plt.legend()
+    plt.title(label)
     plt.show()
 
 
 sol = ConstWay(2, 30)
 step = 0.001
 points_cnt = 10000
-travel_time = 0.5
+travel_time = 0.2
 way = sol.get_way(step, travel_time, points_cnt)
 
-print_res(way, step, travel_time, points_cnt, sol.search_depth)
+print_res(way, travel_time, step, points_cnt, sol.search_depth)
 
-show_res(way, 'time_'+ str(travel_time))
+save_res(way, travel_time)
+
+show_res(way, 'time '+ str(travel_time))
